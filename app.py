@@ -3,6 +3,17 @@ import cv2
 import numpy as np
 from PIL import Image as PILImage
 from scan_and_lookup import detect_and_decode_barcode
+import os
+import json
+import streamlit as st
+
+# Write the credentials to a temp file
+with open("/tmp/gcp_key.json", "w") as f:
+    json.dump(st.secrets["gcp_service_account"], f)
+
+# Set environment variable for Google Vision
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/tmp/gcp_key.json"
+
 
 st.title("Food Product Recognition")
 
