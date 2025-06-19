@@ -1,5 +1,4 @@
 import cv2
-from pyzbar.pyzbar import decode
 import matplotlib.pyplot as plt
 import requests
 from google.cloud import vision
@@ -83,12 +82,13 @@ def search_openfoodfacts_by_logo_and_label(logo, label):
     return search_openfoodfacts_by_text(search_terms)
 
 def detect_and_decode_barcode(image, image_path):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    barcodes = decode(gray)
+    # Use OpenCV's BarcodeDetector (requires OpenCV >= 4.5.1)
+    detector = cv2.barcode_BarcodeDetector()
+    decoded_info, decoded_type, points = detector.detectAndDecode(image)
 
-    # 1. Try barcode
-    if barcodes:
-        barcode_data = barcodes[0].data.decode("utf-8")
+# 1. Try barcode
+    if decoded_info and decoded_info[0]:
+        barcode_data = decoded_info[0]
         url = f"https://world.openfoodfacts.org/api/v0/product/{barcode_data}.json"
         response = requests.get(url)
         if response.status_code == 200:
