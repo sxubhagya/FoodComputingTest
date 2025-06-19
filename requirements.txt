@@ -1,0 +1,9 @@
+streamlit
+opencv-python-headless
+numpy
+pillow
+pyzbar
+google-cloud-vision
+deep-translator
+requests
+matplotlib
